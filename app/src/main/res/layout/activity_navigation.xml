@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@drawable/logo1"/>
+
+    <Button
+        android:id="@+id/btn_1"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:text="点菜"
+        android:textSize="20sp"
+        android:textColor="#0d0c0c"
+        android:background="@drawable/guide_order"
+        android:drawableTop="@drawable/ic_order_gray"
+        android:paddingTop="20dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"/>
+
+    <Button
+        android:id="@+id/btn_2"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="0dp"
+        android:background="@drawable/guide_form"
+        android:drawableTop="@drawable/ic_form_gray"
+        android:paddingTop="20dp"
+        android:text="查看订单"
+        android:textColor="#0d0c0c"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/btn_3"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:text="登录/注册"
+        android:textSize="20sp"
+        android:textColor="#0d0c0c"
+        android:background="@drawable/guide_account"
+        android:drawableTop="@drawable/ic_account_gray"
+        android:paddingTop="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"/>
+
+    <Button
+        android:id="@+id/btn_4"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:text="系统帮助"
+        android:textSize="20sp"
+        android:textColor="#0d0c0c"
+        android:background="@drawable/guide_help"
+        android:drawableTop="@drawable/ic_help_gray"
+        android:paddingTop="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"/>
+
+</RelativeLayout>
