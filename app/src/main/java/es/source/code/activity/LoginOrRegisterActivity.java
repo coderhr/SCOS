@@ -1,6 +1,8 @@
 package es.source.code.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
@@ -23,7 +25,7 @@ public class LoginOrRegisterActivity extends AppCompatActivity {
     public EditText Et1;
     public EditText Et2;
     public Button Back;
-    boolean flag1, flag2;
+    SharedPreferences sharedPreferences;
     String nameStr;
     String passwordStr;
 
@@ -32,13 +34,20 @@ public class LoginOrRegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_or_register);
 
-        Et1 = (EditText) findViewById(R.id.text2);
-        Et2 = (EditText) findViewById(R.id.text1);
-        Back = (Button) findViewById(R.id.back);
+        Et1 = findViewById(R.id.text2);
+        Et2 = findViewById(R.id.text1);
+        Back = findViewById(R.id.back);
 
         Back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+                String name = sharedPreferences.getString("name", "");
+                if(!nameStr.equals(name)){
+                    sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("loginState","0");
+                }
                 Intent intent = new Intent(LoginOrRegisterActivity.this, MainScreen.class);
                 startActivity(intent);
             }
@@ -72,6 +81,15 @@ public class LoginOrRegisterActivity extends AppCompatActivity {
                 Button registerButton;
                 loginButton1 = findViewById(R.id.login);
                 registerButton = findViewById(R.id.register);
+                SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+                String name = sharedPreferences.getString("name", "");
+                if(!nameStr.equals(name)){
+                    loginButton1.setVisibility(View.GONE);
+                    registerButton.setVisibility(View.VISIBLE);
+                }else{
+                    registerButton.setVisibility(View.GONE);
+                    loginButton1.setVisibility(View.VISIBLE);
+                }
                 registerButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -161,6 +179,12 @@ public class LoginOrRegisterActivity extends AppCompatActivity {
                 loginUser.setPassword(PasswordStr);
                 loginUser.setUserName(NameStr);
                 loginUser.setOldUser(OldUser);
+                sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("name", nameStr);
+                editor.putString("password", passwordStr);
+                editor.putString("loginState","1");
+                editor.commit();       //提交修改
             }
         }
         public boolean isRight (String Str){

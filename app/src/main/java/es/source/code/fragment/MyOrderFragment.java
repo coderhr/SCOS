@@ -69,6 +69,11 @@ public class MyOrderFragment extends Fragment implements UnOrderListAdapter.Call
             submit.setText("提交订单");
             totalNum.setText("订单总数：" + CountNum(user.getUnOrderList()));
             totalPrice.setText("订单总价：" + CountPrice(user.getUnOrderList()));
+            if(CountNum(user.getUnOrderList()) == 0){
+                submit.setEnabled(false);
+            }else{
+                submit.setEnabled(true);
+            }
         }else{
             orderListAdapter = new OrderListAdapter(mContext, (LinkedList<Data>) order);
             listView = view.findViewById(R.id.order_layout_listview);
@@ -77,6 +82,11 @@ public class MyOrderFragment extends Fragment implements UnOrderListAdapter.Call
             submit.setText("结账");
             totalNum.setText("订单总数：" + (CountNum(user.getOrderList())));
             totalPrice.setText("订单总价：" + (CountPrice(user.getOrderList())));
+            if(CountNum(user.getOrderList()) == 0){
+                submit.setEnabled(false);
+            }else{
+                submit.setEnabled(true);
+            }
         }
         listView.setOnItemClickListener(new ListView.OnItemClickListener(){
 
@@ -87,6 +97,7 @@ public class MyOrderFragment extends Fragment implements UnOrderListAdapter.Call
 
         return view;
     }
+
     public void setFragmentType(String fragmentType){
         this.fragmentType =  fragmentType;
     }

@@ -1,5 +1,6 @@
 package es.source.code.activity;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,6 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Checkable;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -63,8 +65,11 @@ public class FoodOrderViewActivity extends AppCompatActivity implements MyOrderF
                 user.clearUnOrderList();
                 break;
             case"ordered":
-                user.clearOrderList();
                 Toast.makeText(getApplicationContext(),"您好，老顾客，本次你可享受 7 折优惠",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(FoodOrderViewActivity.this, CheckOutActivity.class);
+                intent.putExtra("User", user);
+                startActivity(intent);
+                user.clearOrderList();
                 break;
         }
         //adapter = new OrderViewAdapter(getSupportFragmentManager(),fragments1);

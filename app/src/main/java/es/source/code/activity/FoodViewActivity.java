@@ -60,20 +60,20 @@ public class FoodViewActivity extends AppCompatActivity implements MyFragment.Ca
         tabLayout.getTabAt(f_pos).select();
 
         list1 = new ArrayList<>();
-        for(int i = 0; i < 10; i++) {
+        for(int i = 1; i < 11; i++) {
             list1.add(new Data("菜名"+i,8*i, false));
         }
 
         list2 = new ArrayList<>();
-        for(int i = 10; i < 20; i++) {
+        for(int i = 11; i < 21; i++) {
             list2.add(new Data("菜名"+i, 3*i, false));
         }
 
         list3 = new ArrayList<>();
-        for(int i = 20; i < 30; i++ ) {
+        for(int i = 21; i < 31; i++ ) {
             list3.add(new Data("菜名"+i, 2*i, false));
         }
-        for(int i = 30; i < 40; i++) {
+        for(int i = 31; i < 41; i++) {
             list4.add(new Data("菜名"+i, 1*i, false));
         }
 

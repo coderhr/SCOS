@@ -31,6 +31,7 @@ public class ProgressBarActivity extends AppCompatActivity {
                 }else{
                     progressBar.setVisibility(View.GONE);
                     Intent intent = new Intent(ProgressBarActivity.this,MainScreen.class);
+                    intent.putExtra("Data","FromEntry");
                     startActivity(intent);
                 }
             }
