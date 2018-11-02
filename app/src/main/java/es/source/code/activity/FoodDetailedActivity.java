@@ -28,7 +28,7 @@ public class FoodDetailedActivity extends Activity {
     private ImageView imageView;
     float x1 = 0;
     float x2 = 0;
-    User user;
+    User user = new User();
 
     TextView name;
     TextView  price;
@@ -48,12 +48,16 @@ public class FoodDetailedActivity extends Activity {
         imageView = findViewById(R.id.image);
 
         Intent intent = getIntent();
-        position = intent.getIntExtra("position",0);
         string = intent.getStringExtra("String");
-        food = (Data)intent.getSerializableExtra("Food");
-        data = (List<Data>)intent.getSerializableExtra("FoodList");
 
-        user = (User)getIntent().getSerializableExtra("User");
+        if(string.equals("UpdateService")){
+            food = (Data)intent.getSerializableExtra("Data");
+        } else {
+            position = intent.getIntExtra("position", 0);
+            food = (Data) intent.getSerializableExtra("Food");
+            data = (List<Data>) intent.getSerializableExtra("FoodList");
+            user = (User) getIntent().getSerializableExtra("User");
+        }
 
         name.setText(food.getName());
         price.setText(String.valueOf(food.getPrice()));
@@ -61,7 +65,7 @@ public class FoodDetailedActivity extends Activity {
 
         switch (position){
             case 0:
-                imageView.setImageDrawable(getResources().getDrawable(R.drawable.food0));
+                imageView.setImageDrawable(getResources().getDrawable(R.drawable.food10));
                 break;
             case 1:
                 imageView.setImageDrawable(getResources().getDrawable(R.drawable.food1));
@@ -97,16 +101,28 @@ public class FoodDetailedActivity extends Activity {
             public void onClick(View v){
                 if(food.isOrder()){
                     order.setText("点菜");
-                    data.get(position).setOrder(false);
-                    food.setOrder(false);
-                    user.deletUnOrderFood(food);
-                    Toast.makeText(getApplicationContext(),"退点成功",Toast.LENGTH_SHORT).show();
+                    if(!string.equals("UpdateService")) {
+                        data.get(position).setOrder(false);
+                        food.setOrder(false);
+                        user.deletUnOrderFood(food);
+                        Toast.makeText(getApplicationContext(), "退点成功", Toast.LENGTH_SHORT).show();
+                    }else{
+                        food.setOrder(false);
+                        user.deletUnOrderFood(food);
+                        Toast.makeText(getApplicationContext(), "退点成功", Toast.LENGTH_SHORT).show();
+                    }
                 }else{
                     order.setText("退点 ");
-                    data.get(position).setOrder(true);
-                    food.setOrder(true);
-                    user.addUnOrderFood(food);
-                    Toast.makeText(getApplicationContext(),"点单成功",Toast.LENGTH_SHORT).show();
+                    if(!string.equals("UpdateService")) {
+                        data.get(position).setOrder(true);
+                        food.setOrder(true);
+                        user.addUnOrderFood(food);
+                        Toast.makeText(getApplicationContext(), "点单成功", Toast.LENGTH_SHORT).show();
+                    }else{
+                        food.setOrder(true);
+                        user.addUnOrderFood(food);
+                        Toast.makeText(getApplicationContext(), "点单成功", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
             }

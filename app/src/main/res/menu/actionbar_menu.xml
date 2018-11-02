@@ -13,5 +13,8 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
     android:id="@+id/server"
     app:showAsAction="never"
     />
-
+    <item android:title="启动实施更新"
+        android:id="@+id/update"
+        app:showAsAction="never"
+        />
 </menu>

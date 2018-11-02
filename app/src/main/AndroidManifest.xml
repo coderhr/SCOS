@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.GET_TASKS" />
 
     <permission
         android:name="scos.permission.ACCESSSCOS"
@@ -34,13 +35,31 @@
         android:permission="scos.permission.ACCESSSCOS">
         <activity android:name=".LoginOrRegisterActivity" />
         <activity android:name=".ProgressBarActivity" />
-        <activity android:name="es.source.code.FoodViewActivity" />
         <activity android:name=".FoodViewActivity" />
         <activity android:name=".FoodOrderViewActivity" />
         <activity android:name=".FoodDetailedActivity" />
         <activity android:name=".SCOSHelperActivity"/>
         <activity android:name=".CheckOutActivity">
         </activity>
+        <service
+            android:name="es.source.code.service.ServerObserverService"
+            android:process="es.source.code.observerservice">
+            <intent-filter>
+                <action android:name="es.source.code.service.ServerObserverService"/>
+                <category android:name = "android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </service>
+        <service
+            android:name="es.source.code.service.UpdateService"/>
+
+        <receiver android:name="es.source.code.br.DeviceStartedListener"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED"/>
+                <category android:name="android.intent.category.HOME"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

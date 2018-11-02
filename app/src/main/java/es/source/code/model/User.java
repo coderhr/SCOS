@@ -12,6 +12,7 @@ public class User implements Serializable{
     private boolean oldUser;
     private List<Data> unOrderFood;
     private List<Data> orderFood;
+    private DataList dataList;
 
     public User(){
         this.userName = "temp";
@@ -96,6 +97,14 @@ public class User implements Serializable{
 
     public List<Data> getOrderList(){
         return this.orderFood;
+    }
+
+    public void setDataList(DataList dataList){
+        this.dataList = dataList;
+    }
+
+    public DataList getDataList(){
+        return dataList;
     }
 
 }

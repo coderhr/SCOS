@@ -42,13 +42,6 @@ public class MyFragment extends Fragment implements ListViewAdapter.CallBack{
         callback = callBack;
     }
 
-  /*  public MyFragment(String title, String content){
-        super();
-        this.title = title;
-        this.content = content;
-    }*/
-
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,16 +87,18 @@ public class MyFragment extends Fragment implements ListViewAdapter.CallBack{
     }
 
     @Override
-    public void onClick(View view, boolean cancel){
+    public void onClick(View view, boolean cancel){         //通过实现在listViewAdapter中的回调函数，接收从里面传回的被点击的位置信息
 
         if(cancel == false){
             data.get((Integer)view.getTag()).setOrder(true);
             food = data.get((Integer)view.getTag());
+            food.setStoreNum((food.getStoreNum() - 1));
             food.setOrder(true);
             callback.event(food);
         }else{
             data.get((Integer)view.getTag()).setOrder(false);
             food = data.get((Integer)view.getTag());
+            food.setStoreNum(food.getStoreNum() + 1);
             food.setOrder(false);
             callback.event(food);
         }
@@ -115,8 +110,5 @@ public class MyFragment extends Fragment implements ListViewAdapter.CallBack{
         this.position = position;
     }
 
-    /*public void SetData(ArrayList<Data> data){
-        this.data = data;
-    }*/
 
 }

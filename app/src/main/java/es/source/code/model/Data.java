@@ -8,13 +8,14 @@ public class Data implements Serializable{
     private boolean order;
     private String remark;
     private int num = 1;
+    private int storeNum;
 
-    public Data(String name, int price,boolean order){
+    public Data(String name, int price,boolean order, int storeNum){
         this.name = name;
         this.price = price;
         this.order = order;
+        this.storeNum = storeNum;
     }
-
 
     public Data(String name, int price, boolean order, int num, String remark){
         this.name = name;
@@ -57,13 +58,23 @@ public class Data implements Serializable{
         this.price = price;
     }
 
+    public int getStoreNum() {
+        return storeNum;
+    }
+
     public Data(String name, int price){
+
         this.name = name;
         this.price = price;
 
         this.num = 1;
         this.remark = "";
         this.order = false;
+    }
+
+    public Data(int num , String name){
+        this.num = num;
+        this.name = name;
     }
 
     public String getName() {
@@ -76,5 +87,9 @@ public class Data implements Serializable{
 
     public boolean getButton() {
         return this.order;
+    }
+
+    public void setStoreNum(int storeNum){
+        this.storeNum = storeNum;
     }
 }

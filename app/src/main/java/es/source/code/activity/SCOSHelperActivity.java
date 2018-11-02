@@ -37,6 +37,9 @@ public class SCOSHelperActivity extends AppCompatActivity {
         setContentView(R.layout.activity_scoshelper);
 
         call = findViewById(R.id.call);
+        message = findViewById(R.id.message);
+        mail = findViewById(R.id.mail);
+
         call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,13 +49,10 @@ public class SCOSHelperActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        message = findViewById(R.id.message);
+
         message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:"+ "5554"));
-                intent.putExtra("sms_body", "test scos helper");
-                startActivity(intent);*/
                 SmsManager manager = SmsManager.getDefault();
 
                 List<String> divideContents = manager.divideMessage("text scos helper");
@@ -67,7 +67,6 @@ public class SCOSHelperActivity extends AppCompatActivity {
             }
         });
 
-        mail = findViewById(R.id.mail);
         mail.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
