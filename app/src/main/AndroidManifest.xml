@@ -31,7 +31,6 @@
             </intent-filter>
         </activity>
 
-        <!-- MainScreen -->
         <activity android:name=".MainScreen" />
         android:permission="scos.permission.ACCESSSCOS">
         <activity android:name=".LoginOrRegisterActivity" />

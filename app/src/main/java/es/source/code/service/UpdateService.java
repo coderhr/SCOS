@@ -31,36 +31,37 @@ public class UpdateService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent){
+        String update = intent.getExtras().getString("String");
 
-        data = (Data) intent.getSerializableExtra("Data");
-        NotificationManager notificationManager = (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(PUSH_CHANNEL_ID, PUSH_CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
+        if(update.equals("Yes")) {
+            data = (Data) intent.getSerializableExtra("Data");
+            NotificationManager notificationManager = (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationChannel channel = new NotificationChannel(PUSH_CHANNEL_ID, PUSH_CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
+                if (notificationManager != null) {
+                    notificationManager.createNotificationChannel(channel);
+                }
+            }
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, PUSH_CHANNEL_ID);
+            Intent notificationIntent = new Intent(this, FoodDetailedActivity.class);
+            notificationIntent.putExtra("Data", data);
+            notificationIntent.putExtra("String", "UpdateService");
+            notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+            builder.setContentTitle("新品上架")//设置通知栏标题
+                    .setContentIntent(pendingIntent) //设置通知栏点击意图
+                    .setContentText(data.getName() + "  " + data.getPrice() + "元")
+                    .setTicker("通知内容") //通知首次出现在通知栏，带上升动画效果的
+                    .setWhen(System.currentTimeMillis())//通知产生的时间，会在通知信息里显示，一般是系统获取到的时间
+                    .setSmallIcon(R.mipmap.ic_launcher)//设置通知小ICON
+                    .setChannelId(PUSH_CHANNEL_ID)
+                    .setDefaults(Notification.DEFAULT_ALL);
+
+            Notification notification = builder.build();
+            notification.flags |= Notification.FLAG_AUTO_CANCEL;
             if (notificationManager != null) {
-                notificationManager.createNotificationChannel(channel);
+                notificationManager.notify(PUSH_NOTIFICATION_ID, notification);
             }
         }
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this,PUSH_CHANNEL_ID);
-        Intent notificationIntent = new Intent(this, FoodDetailedActivity.class);
-        notificationIntent.putExtra("Data",data);
-        notificationIntent.putExtra("String","UpdateService");
-        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-        builder.setContentTitle("新品上架")//设置通知栏标题
-                .setContentIntent(pendingIntent) //设置通知栏点击意图
-                .setContentText(data.getName() + "  " + data.getPrice() + "元")
-                .setTicker("通知内容") //通知首次出现在通知栏，带上升动画效果的
-                .setWhen(System.currentTimeMillis())//通知产生的时间，会在通知信息里显示，一般是系统获取到的时间
-                .setSmallIcon(R.mipmap.ic_launcher)//设置通知小ICON
-                .setChannelId(PUSH_CHANNEL_ID)
-                .setDefaults(Notification.DEFAULT_ALL);
-
-        Notification notification = builder.build();
-        notification.flags |= Notification.FLAG_AUTO_CANCEL;
-        if (notificationManager != null) {
-            notificationManager.notify(PUSH_NOTIFICATION_ID, notification);
-        }
-
-        str = intent.getStringExtra("string");
     }
 }

@@ -28,12 +28,12 @@ public class MainScreen extends AppCompatActivity {
         orderButton=findViewById(R.id.btn_1);
         checkButton=findViewById(R.id.btn_2);
         loginButton=findViewById(R.id.btn_3);
-        if(!Str.equals(Data)){
-            if(!(Str.equals("LoginSuccess")||Str.equals("RegisterSuccess"))) {
+
+            if(!(Str.equals("LoginSuccess"))) {
                 orderButton.setVisibility(View.GONE);
                 checkButton.setVisibility(View.GONE);
             }
-        }
+
         //监听登录按钮，并跳转登录界面
         loginButton.setOnClickListener(new OnClickListener(){
             @Override

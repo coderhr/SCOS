@@ -31,7 +31,7 @@ public class ServerObserverService extends Service {
    Thread thread;
    private static String title;
 
-    /*public static boolean isAppRunning(Context context, String packageName){
+    public static boolean isAppRunning(Context context, String packageName){
         ActivityManager scos = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningTaskInfo> list = scos.getRunningTasks(100);
         if(list.size() <= 0){
@@ -41,18 +41,6 @@ public class ServerObserverService extends Service {
             if(info.baseActivity.getPackageName().equals(packageName)){
                 return true;
             }
-        }
-        return false;
-    }*/
-    public static boolean isAppRunning(Context context){
-        ActivityManager activityManager = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
-        String packageName = context.getPackageName();
-        List<ActivityManager.RunningAppProcessInfo> appProcess = activityManager.getRunningAppProcesses();
-        if(appProcess == null){
-            return false;
-        }
-        if(appProcess.get(0).processName.contains(packageName)){
-            return true;
         }
         return false;
     }
@@ -104,7 +92,7 @@ public class ServerObserverService extends Service {
                     messengerClient = msg.replyTo;
                     break;
                 case 2:
-                    if(isAppRunning(context)){
+                    if(isAppRunning(context, context.getPackageName())){
                         Message message = Message.obtain();
                         message.replyTo = messengerClient;
                         message.setData(msg.getData());
@@ -123,45 +111,7 @@ public class ServerObserverService extends Service {
                     break;
             }
             super.handleMessage(msg);
-            /*switch(msg.what){
-                case 1:
-                    working = true;
-                   new Thread(new Runnable(){
-                       @Override
-                       public void run(){
-                           while(working) {
-                               Message message = new Message();
-                               Bundle bundle = new Bundle();
-                               bundle.putSerializable("coldFood", (Serializable) getFood("cold"));
-                               bundle.putSerializable("hotFood", (Serializable)getFood("hot"));
-                               bundle.putSerializable("seaFood", (Serializable)getFood("sea"));
-                               bundle.putSerializable("drinkFood", (Serializable)getFood("drink"));
-                               message.setData(bundle);
-                               cMessageHandler.sendMessage(message);
-                               try{
-                                   Thread.sleep(300);
-                               } catch (InterruptedException e) {
-                                   e.printStackTrace();
-                               }
-                           }
-                       }
-                   }).start();
-                   if(isAppRunning(context,context.getPackageName())){
-                       Message message = Message.obtain();
-                       message.replyTo = messengerClient;
-                       message.setData(msg.getData());
-                       message.what = 10;
-                       try{
-                           message.replyTo.send(message);
-                       } catch (RemoteException e) {
-                           e.printStackTrace();
-                       }
-                   }
-                    break;
-                case 0:
-                    stop();
-                    break;
-            }*/
+
         }
     };
 

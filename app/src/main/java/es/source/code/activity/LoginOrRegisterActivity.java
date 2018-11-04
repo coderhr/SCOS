@@ -46,6 +46,7 @@ public class LoginOrRegisterActivity extends AppCompatActivity {
                     editor.putString("loginState","0");
                 }
                 Intent intent = new Intent(LoginOrRegisterActivity.this, MainScreen.class);
+                intent.putExtra("Data","FromBack");
                 startActivity(intent);
             }
         });
@@ -93,6 +94,7 @@ public class LoginOrRegisterActivity extends AppCompatActivity {
                         if(isRight(nameStr)&&isRight(passwordStr)) {
                             login(nameStr, passwordStr, false);
                             Intent intent = new Intent(LoginOrRegisterActivity.this, MainScreen.class);
+                            intent.putExtra("Data", "registerButton");
                             startActivity(intent);
                             Toast.makeText(getApplicationContext(), "欢迎您成为 SCOS 新用户",
                                     Toast.LENGTH_SHORT).show();
@@ -107,6 +109,7 @@ public class LoginOrRegisterActivity extends AppCompatActivity {
                         if(isRight(nameStr)&&isRight(passwordStr)) {
                             login(nameStr, passwordStr, true);
                             Intent intent = new Intent(LoginOrRegisterActivity.this, ProgressBarActivity.class);
+                            intent.putExtra("Data","LoginSuccess");
                             startActivity(intent);
                         }else{
                             return;
@@ -146,6 +149,7 @@ public class LoginOrRegisterActivity extends AppCompatActivity {
                         if(isRight(nameStr)&&isRight(passwordStr)) {
                             login(nameStr, passwordStr, false);
                             Intent intent = new Intent(LoginOrRegisterActivity.this, MainScreen.class);
+                            intent.putExtra("Data", "registersuccess");
                             startActivity(intent);
                             Toast.makeText(getApplicationContext(), "欢迎您成为 SCOS 新用户",
                                     Toast.LENGTH_SHORT).show();
@@ -160,6 +164,7 @@ public class LoginOrRegisterActivity extends AppCompatActivity {
                         if(isRight(nameStr)&&isRight(passwordStr)) {
                             login(nameStr, passwordStr, true);
                             Intent intent = new Intent(LoginOrRegisterActivity.this, ProgressBarActivity.class);
+                            intent.putExtra("Data", "LoginSuccess");
                             startActivity(intent);
                         }else{
                             return;

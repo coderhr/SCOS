@@ -49,7 +49,7 @@ public class CheckOutActivity extends Activity {
                 }
             }
             Intent intent = new Intent(CheckOutActivity.this, MainScreen.class);
-            intent.putExtra("Data", "FromEntry");
+            intent.putExtra("Data", "LoginSuccess");
             startActivity(intent);
             return null;
         }
