@@ -19,6 +19,7 @@ public class UpdateService extends IntentService {
     private static final String PUSH_CHANNEL_ID = "PUSH_NOTIFY_ID";
     private static final String PUSH_CHANNEL_NAME = "PUSH_NOTIFY_NAME";
     public Data data;
+    public String str;
 
     public UpdateService() {
         super("UpdateService");
@@ -59,5 +60,7 @@ public class UpdateService extends IntentService {
         if (notificationManager != null) {
             notificationManager.notify(PUSH_NOTIFICATION_ID, notification);
         }
+
+        str = intent.getStringExtra("string");
     }
 }

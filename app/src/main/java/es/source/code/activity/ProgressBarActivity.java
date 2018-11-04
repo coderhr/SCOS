@@ -11,31 +11,35 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import es.source.code.model.MessageEvent;
+
 public class ProgressBarActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private int mProgress=0;
 
-    private Handler mHandler;
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Event(MessageEvent messageEvent){
+        if(messageEvent.getMessage().equals("0x111")){
+            progressBar.setProgress(mProgress);
+        }else{
+            progressBar.setVisibility(View.GONE);
+            Intent intent = new Intent(ProgressBarActivity.this,MainScreen.class);
+            intent.putExtra("Data","FromEntry");
+            startActivity(intent);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_progress_bar);
+        EventBus.getDefault().register(this);
         progressBar = (ProgressBar)findViewById(R.id.progress_bar);
 
-        mHandler = new Handler(){
-            @Override
-            public void handleMessage(Message msg) {
-                if(msg.what==0x111){
-                    progressBar.setProgress(mProgress);
-                }else{
-                    progressBar.setVisibility(View.GONE);
-                    Intent intent = new Intent(ProgressBarActivity.this,MainScreen.class);
-                    intent.putExtra("Data","FromEntry");
-                    startActivity(intent);
-                }
-            }
-        };
         new Thread(new Runnable(){
             @Override
             public void run(){
@@ -43,11 +47,11 @@ public class ProgressBarActivity extends AppCompatActivity {
                     mProgress=doWork();
                     Message m = new Message();
                     if(mProgress<100){
-                        m.what= 0x111;       //设置消息代码
-                        mHandler.sendMessage(m);
+                        MessageEvent messageEvent = new MessageEvent("0x111");
+                        EventBus.getDefault().post(messageEvent);
                     }else{
-                        m.what=0x110;
-                        mHandler.sendMessage(m);
+                        MessageEvent messageEvent = new MessageEvent("0x110");
+                        EventBus.getDefault().post(messageEvent);
                         break;
                     }
                 }
@@ -62,5 +66,11 @@ public class ProgressBarActivity extends AppCompatActivity {
                 return mProgress;
             }
         }).start();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

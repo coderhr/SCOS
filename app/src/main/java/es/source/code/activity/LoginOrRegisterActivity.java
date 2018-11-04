@@ -3,9 +3,6 @@ package es.source.code.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.RectF;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -199,5 +196,6 @@ public class LoginOrRegisterActivity extends AppCompatActivity {
             Matcher m = p.matcher(Str);
             return m.find();
         }
+
 }
 
