@@ -7,32 +7,119 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import net.sf.json.JSONObject;
+
+import org.greenrobot.eventbus.EventBus;
+
+import es.source.code.model.MessageEvent;
 import es.source.code.model.User;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LoginOrRegisterActivity extends AppCompatActivity {
 
-    public EditText Et1;
-    public EditText Et2;
+    public EditText Account;
+    public EditText Password;
     public Button Back;
     SharedPreferences sharedPreferences;
     String nameStr;
     String passwordStr;
+    Boolean judge;
+
+    String baseUrl = "http://192.168.1.101:8080/LoginValidator";
+
+    private void sendJson(){
+        try{
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("nameStr",nameStr);
+            jsonObject.put("passwordStr", passwordStr);
+            URL url = new URL(baseUrl);
+            HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();    // 打开一个HttpURLConnection连接
+            urlConn.setConnectTimeout(5 * 1000);      // 设置连接超时时间
+            urlConn.setReadTimeout(5 * 1000);     //设置从主机读取数据超时zzzzzzzzzzzzz
+            urlConn.setDoOutput(true);           // Post请求必须设置允许输出 默认false
+            urlConn.setDoInput(true);             //设置请求允许输入 默认是true
+            urlConn.setUseCaches(false);          // Post请求不能使用缓存
+            urlConn.setRequestMethod("POST");      // 设置为Post请求
+            urlConn.setInstanceFollowRedirects(true);         //设置本次连接是否自动处理重定向
+            urlConn.setRequestProperty("Content-Type", "application/json");       // 配置请求Content-Type
+            String content = String.valueOf(jsonObject);           // 开始连接
+            urlConn.connect();
+            DataOutputStream dos = new DataOutputStream(urlConn.getOutputStream());      // 发送请求参数
+            dos.writeBytes(content);
+            dos.flush();
+            dos.close();
+
+            if (urlConn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                Log.i("log", "接受返回值");
+                InputStreamReader in = new InputStreamReader(urlConn.getInputStream());
+                BufferedReader bf = new BufferedReader(in);
+                String recData = null;
+                String result = "";
+                while ((recData = bf.readLine()) != null) {
+                    result += recData;
+                }
+                in.close();
+                urlConn.disconnect();
+                JSONObject json_res = JSONObject.fromObject(result);
+                if (json_res.get("RESULTCODE").equals("1")) {
+                    if(judge == true){
+                        Intent intent = new Intent(LoginOrRegisterActivity.this, ProgressBarActivity.class);
+                        intent.putExtra("Data","LoginSuccess");
+                        startActivity(intent);
+                    }else{
+
+                    }
+
+                } else {
+                    MessageEvent messageEvent = new MessageEvent(String.valueOf(2));
+                    EventBus.getDefault().post(messageEvent);
+                }
+            } else {
+                MessageEvent messageEvent = new MessageEvent(String.valueOf(2));
+                EventBus.getDefault().post(messageEvent);
+            }
+            urlConn.disconnect();
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    class LoginThread implements Runnable{
+        public void run(){
+            sendJson();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_or_register);
 
-        Et1 = findViewById(R.id.text2);
-        Et2 = findViewById(R.id.text1);
+        Account = findViewById(R.id.text1);
+        Password = findViewById(R.id.text2);
         Back = findViewById(R.id.back);
 
         Back.setOnClickListener(new View.OnClickListener() {
@@ -51,7 +138,7 @@ public class LoginOrRegisterActivity extends AppCompatActivity {
             }
         });
 
-        Et1.addTextChangedListener(new TextWatcher() {
+        Account.addTextChangedListener(new TextWatcher() {
             //文字改变前的回调方法
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -96,6 +183,7 @@ public class LoginOrRegisterActivity extends AppCompatActivity {
                             Intent intent = new Intent(LoginOrRegisterActivity.this, MainScreen.class);
                             intent.putExtra("Data", "registerButton");
                             startActivity(intent);
+
                             Toast.makeText(getApplicationContext(), "欢迎您成为 SCOS 新用户",
                                     Toast.LENGTH_SHORT).show();
                         }else{
@@ -108,9 +196,7 @@ public class LoginOrRegisterActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         if(isRight(nameStr)&&isRight(passwordStr)) {
                             login(nameStr, passwordStr, true);
-                            Intent intent = new Intent(LoginOrRegisterActivity.this, ProgressBarActivity.class);
-                            intent.putExtra("Data","LoginSuccess");
-                            startActivity(intent);
+
                         }else{
                             return;
                         }
@@ -118,7 +204,7 @@ public class LoginOrRegisterActivity extends AppCompatActivity {
                 });
             }
         });
-        Et2.addTextChangedListener(new TextWatcher() {
+        Password.addTextChangedListener(new TextWatcher() {
             //文字改变前的回调方法
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -163,9 +249,6 @@ public class LoginOrRegisterActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         if(isRight(nameStr)&&isRight(passwordStr)) {
                             login(nameStr, passwordStr, true);
-                            Intent intent = new Intent(LoginOrRegisterActivity.this, ProgressBarActivity.class);
-                            intent.putExtra("Data", "LoginSuccess");
-                            startActivity(intent);
                         }else{
                             return;
                         }
@@ -173,10 +256,16 @@ public class LoginOrRegisterActivity extends AppCompatActivity {
                 });
             }
         });
+
     }
 
         public void login (String NameStr, String PasswordStr, boolean OldUser) {
+
+            judge = OldUser;
+
             if (isRight(NameStr) && isRight(PasswordStr)) {
+                Thread loginThread = new Thread(new LoginThread());
+                loginThread.start();
                 User loginUser = new User(NameStr, PasswordStr);
                 loginUser.setPassword(PasswordStr);
                 loginUser.setUserName(NameStr);

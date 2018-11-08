@@ -34,4 +34,11 @@ dependencies {
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.android.support:recyclerview-v7:28.0.0'
     implementation 'org.greenrobot:eventbus:3.1.1'
+    implementation 'org.greenrobot:eventbus:3.1.1'
+    implementation files('libs/json-lib-2.4-jdk15.jar')
+    implementation files('libs/ezmorph-1.0.6.jar')
+    implementation files('libs/commons-logging-1.2.jar')
+    implementation files('libs/commons-lang-2.3.jar')
+    implementation files('libs/commons-collections-3.2.jar')
+    implementation files('libs/commons-beanutils-1.9.3.jar')
 }
